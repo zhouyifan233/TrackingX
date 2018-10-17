@@ -184,8 +184,10 @@ classdef EllipsoidalGaterX <GaterX
                         C = pi;
                     case 3
                         C = 4*pi/3;
+                    case 4
+                        C = pi^2/2;
                     otherwise
-                        error('ELLIPSGATER:INVMEASDIMS','Ellipsoidal Gating has only been implemented for observations of up to 3 dimensions!');
+                        error('ELLIPSGATER:INVMEASDIMS','Ellipsoidal Gating has only been implemented for observations of up to 4 dimensions!');
                 end
                 GateVolumes(trackInd) = C*this.GateLevel^(NumObsDims/2)*det(InnovErrCovar)^(1/2);    
                 ValidationMatrix(trackInd,:) = this.mahalDist(MeasurementList, PredMeasMean, InnovErrCovar, 2) < this.GateLevel;
