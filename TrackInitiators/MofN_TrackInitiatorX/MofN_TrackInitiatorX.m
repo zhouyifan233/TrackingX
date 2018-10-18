@@ -91,7 +91,7 @@ classdef MofN_TrackInitiatorX < TrackInitiatorX
             this.WindowSize = max(this.ConfirmThreshold,this.DeleteThreshold);
         end
         
-        function [ConfirmedTrackList, TentativeTrackList] = initiateTracks(this,ConfirmedTrackList, MeasurementList, AssocWeightsMatrix)
+        function [ConfirmedTrackList, TentativeTrackList, TrackIDavail] = initiateTracks(this,ConfirmedTrackList, MeasurementList, AssocWeightsMatrix, TrackIDavail)
         % INITIATETRACKS Perform track initiation
         %   
         % DESCRIPTION: 
@@ -206,7 +206,7 @@ classdef MofN_TrackInitiatorX < TrackInitiatorX
                 NewTrack.addprop('Filter');
                 NewTrack.addprop('TrackID');
                 NewTrack.addprop('DetectionHistory');
-                NewTrack.TrackID = this.TrackIdGenFcn(this);
+                NewTrack.TrackID = TrackIDavail;TrackIDavail = TrackIDavail + 1;
                 windowSize = max(this.ConfirmThreshold(2), this.DeleteThreshold(2));
                 NewTrack.DetectionHistory = [-ones(1,windowSize-1),1];
                 NewTrack.Filter = copy(this.InitFilter);
