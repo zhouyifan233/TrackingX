@@ -176,7 +176,7 @@ classdef ProbabilisticDataAssocX < DataAssociatorX
                 associate@DataAssociatorX(this);
                                     
             else
-                fprintf('No tracks where found. Skipping JPDAF association step...\n');
+%                 fprintf('No tracks where found. Skipping JPDAF association step...\n');
                 this.ValidationMatrix = zeros(1, size(this.MeasurementList,2));
                 this.ClusterList = [];
                 this.UnassocTrackInds = [];
@@ -200,7 +200,7 @@ classdef ProbabilisticDataAssocX < DataAssociatorX
                     this.TrackList{trackInd}.Filter.predict();
                 end    
             else
-                fprintf('No tracks where found. Skipping JPDAF prediction step...\n');
+%                 fprintf('No tracks where found. Skipping JPDAF prediction step...\n');
             end
         end
         

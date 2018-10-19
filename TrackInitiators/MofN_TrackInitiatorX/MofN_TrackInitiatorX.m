@@ -186,8 +186,10 @@ classdef MofN_TrackInitiatorX < TrackInitiatorX
                     del_tracks = del_tracks + 1;
                     del_flag = 1;
                 elseif(sum(this.DataAssociator.TrackList{t}.DetectionHistory(end-(M_c-1):end)==1)>= this.ConfirmThreshold(1))
-                    disp("Confirming new track");
+%                     disp("Confirming new track");
                     ConfirmedTrackList{end+1} = this.DataAssociator.TrackList{t};
+                    ConfirmedTrackList{end}.TrackID = TrackIDavail;
+                    TrackIDavail = TrackIDavail + 1;
                     this.DataAssociator.TrackList{t} = [];
                     del_tracks = del_tracks + 1;
                     del_flag = 1;
@@ -206,7 +208,7 @@ classdef MofN_TrackInitiatorX < TrackInitiatorX
                 NewTrack.addprop('Filter');
                 NewTrack.addprop('TrackID');
                 NewTrack.addprop('DetectionHistory');
-                NewTrack.TrackID = TrackIDavail;TrackIDavail = TrackIDavail + 1;
+%                 NewTrack.TrackID = TrackIDavail;TrackIDavail = TrackIDavail + 1;
                 windowSize = max(this.ConfirmThreshold(2), this.DeleteThreshold(2));
                 NewTrack.DetectionHistory = [-ones(1,windowSize-1),1];
                 NewTrack.Filter = copy(this.InitFilter);
@@ -231,5 +233,16 @@ classdef MofN_TrackInitiatorX < TrackInitiatorX
             end
             TentativeTrackList = this.DataAssociator.TrackList;
         end 
+        
+        function this = updateDataAssociatorTrackList(this, TransormationMatrix)
+            for i = 1:size(this.DataAssociator.TrackList, 2)
+                oldState = this.DataAssociator.TrackList{i}.Filter.StateMean;
+                oldPos = [oldState(1); oldState(3); 1];
+                newPos = TransormationMatrix * oldPos;
+                newState = [newPos(1)/newPos(3); oldState(2); newPos(2)/newPos(3); oldState(4)];
+                this.DataAssociator.TrackList{i}.Filter.StateMean = newState;
+            end
+        end
+        
     end
 end
